@@ -1,0 +1,57 @@
+Example:
+
+  ### Controller
+  class PostsController < ApplicationController
+    autocomplete_for :user, :name
+  end
+
+    # Options
+    By default, autocomplete_for limits the results to 10 entries,
+    and sorts by the given field.
+    
+    autocomplete_for takes a third parameter, an options hash to
+    the find method used to search for the records:
+    
+      autocomplete_for :user, :name, :limit => 15, :order => 'created_at DESC'
+      
+    # Block    
+    with a block you can generate any output you need(passed into render :inline):
+      autocomplete_for :post, :title do |items| 
+        items.map{|item| "#{item.title} -- #{item.id}"}.join("\n")
+      end
+      
+  ### View
+  <%= f.text_field :auto_user_name, :class => 'autocomplete', 'autocomplete_url'=>autocomplete_for_user_name_users_path %>
+
+  ### Routes
+  map.resources :users, :collection => { :autocomplete_for_user_name => :get}
+  
+  ### Records
+  class User
+    find_by_autocomplete 'name' --> self.find_by_autocomplete_name
+  end
+  class Post
+    has_one :user
+    autocomplete_for('user','name') --> auto_user_name= + auto_user_name
+  end
+  
+  add autocomplete_for to your models to directly transform field values to objects
+  and transform these objects back into field values for display
+  - uses find_by_autocomplete_#{name} to find the wanted record
+  - unfound record -> nil
+  - blank string -> nil
+    
+  ### JS
+  use any library you like 
+  (includes examples for jquery jquery.js + jquery.autocomplete.js + jquery.autocomplete.css )
+  jQuery(function($){//on document ready
+    //autocomplete
+    $('input.autocomplete').each(function(){
+      var input = $(this);
+      input.autocomplete(input.attr('autocomplete_url'));
+    });
+  });
+
+Copyright (c) 2008 Michael Grosser, released under the MIT license
+   
+Original: Copyright (c) 2007 David Heinemeier Hansson, released under the MIT license   
