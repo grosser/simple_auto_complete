@@ -39,7 +39,7 @@ module Grosser
           if block_given?
             out = yield(@items)
           else
-            out = %Q[<%= @items.map {|item| h(item.#{method})}.join("\n")%>]
+            out = %Q[<%= @items.map {|item| h(item.#{method})}.uniq.join("\n")%>]
           end
           render :inline => out
         end
