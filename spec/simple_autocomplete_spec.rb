@@ -32,6 +32,13 @@ describe UsersController do
       @c.autocomplete_for_user_name
     end
     
+    it "oders ASC bey name" do
+      User.expects(:find).with do |all,options|
+        options[:order] == 'name ASC'
+      end
+      @c.autocomplete_for_user_name
+    end
+    
     it "finds by name" do
       @c.stubs(:params).returns :q=>'Hans'
       User.expects(:find).with do |all,options|
