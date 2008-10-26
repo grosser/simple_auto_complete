@@ -31,8 +31,10 @@ module Grosser
       def autocomplete_for(object, method, options = {})
         define_method("autocomplete_for_#{object}_#{method}") do
           find_options = { 
-            :conditions => [ "LOWER(#{method}) LIKE ?", '%'+params['q'].to_s.downcase + '%' ],             :order => "#{method} ASC",
-            :limit => 10 }.merge!(options)
+            :conditions => [ "LOWER(#{method}) LIKE ?", '%'+params[:q].to_s.downcase + '%' ],
+            :order => "#{method} ASC",
+            :limit => 10 
+            }.merge!(options)
           
           @items = object.to_s.camelize.constantize.find(:all, find_options)
           
