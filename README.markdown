@@ -60,7 +60,8 @@ Records (Optional)
  - `@post.auto_user_name='Michael'` -> `@post.user == User(name:Michael)` + `@post.auto_user_name=='Michael'`
  - unfound record -> nil
  - blank string -> nil
-``
+
+Example for a pos with autocompleted user name:
 
     class User
       find_by_autocomplete :name #User.find_by_autocomplete_name
