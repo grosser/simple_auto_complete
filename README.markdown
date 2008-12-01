@@ -16,7 +16,7 @@ Examples
 
 Controller
 ----------
-By default, autocomplete_for limits the results to 10 entries,
+By default, `autocomplete_for` limits the results to 10 entries,
 and sorts by the given field.
 
     class UsersController < ApplicationController
@@ -46,13 +46,13 @@ JS
 --
 use any library you like
 (includes examples for jquery jquery.js + jquery.autocomplete.js + jquery.autocomplete.css )
-jQuery(function($){//on document ready
-  //autocomplete
-  $('input.autocomplete').each(function(){
-    var input = $(this);
-    input.autocomplete(input.attr('autocomplete_url'));
-  });
-});
+    jQuery(function($){//on document ready
+      //autocomplete
+      $('input.autocomplete').each(function(){
+        var input = $(this);
+        input.autocomplete(input.attr('autocomplete_url'));
+      });
+    });
 
 Records (Optional)
 ------------------
@@ -60,6 +60,7 @@ Records (Optional)
  - `@post.auto_user_name='Michael'` -> `@post.user == User(name:Michael)` + `@post.auto_user_name=='Michael'`
  - unfound record -> nil
  - blank string -> nil
+``
 
     class User
       find_by_autocomplete :name #User.find_by_autocomplete_name
