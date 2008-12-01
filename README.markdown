@@ -45,7 +45,9 @@ Routes
 JS
 --
 use any library you like
-(includes examples for jquery jquery.js + jquery.autocomplete.js + jquery.autocomplete.css )
+(includes examples for jquery jquery.js + jquery.autocomplete.js + jquery.autocomplete.css)
+
+
     jQuery(function($){//on document ready
       //autocomplete
       $('input.autocomplete').each(function(){
