@@ -52,7 +52,7 @@ use any library you like
       //autocomplete
       $('input.autocomplete').each(function(){
         var $input = $(this);
-        input.autocomplete($input.attr('autocomplete_url'));
+        $input.autocomplete($input.attr('autocomplete_url'));
       });
     });
 
@@ -60,16 +60,18 @@ Records (Optional)
 ------------------
  - Controller find works independent of this find
  - Tries to find the record by using autocomplete on the corresponding model
+
     @post.auto_user_name='Michael'
     @post.user == User.find_by_autocomplete_name('Michael')
     @post.auto_user_name == 'Michael'
+
  - unfound record -> nil
  - blank string -> nil
 
 Example for a post with autocompleted user name:
 
     class User
-      find_by_autocomplete :name #User.find_by_autocomplete_name
+      find_by_autocomplete :name # User.find_by_autocomplete_name('Michael')
     end
 
     class Post
