@@ -59,12 +59,7 @@ use any library you like
 Records (Optional)
 ------------------
  - Controller find works independent of this find
- - Tries to find the record by using autocomplete on the corresponding model
-
-    @post.auto_user_name='Michael'
-    @post.user == User.find_by_autocomplete_name('Michael')
-    @post.auto_user_name == 'Michael'
-
+ - Tries to find the record by using `find_by_autocomplete_xxx` on the records model
  - unfound record -> nil
  - blank string -> nil
 
