@@ -54,8 +54,9 @@ module Grosser
     # -> Post has autocomplete_for('user','name')
     # -> User has find_by_autocomplete('name')
     module RecordMethods
-      def autocomplete_for(object,method)
-        name = object.to_s.underscore
+      def autocomplete_for(object,method,options={})
+        name = options[:name] || object.to_s.underscore
+        name = name.to_s
         object = object.to_s.camelize.constantize
         
         #auto_user_name=

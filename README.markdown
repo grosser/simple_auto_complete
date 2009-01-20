@@ -1,6 +1,6 @@
 Goals
 =====
- - simple unobstrusive autocomplet
+ - simple unobstrusive autocomplete
  - JS-library-independent
  - Controller and Model helpers
 
@@ -17,7 +17,7 @@ Examples
 Controller
 ----------
 By default, `autocomplete_for` limits the results to 10 entries,
-and sorts by the given field.
+and sorts by the autocomplete field.
 
     class UsersController < ApplicationController
       autocomplete_for :user, :name
@@ -51,19 +51,22 @@ use any library you like
     jQuery(function($){//on document ready
       //autocomplete
       $('input.autocomplete').each(function(){
-        var input = $(this);
-        input.autocomplete(input.attr('autocomplete_url'));
+        var $input = $(this);
+        input.autocomplete($input.attr('autocomplete_url'));
       });
     });
 
 Records (Optional)
 ------------------
  - Controller find works independent of this find
- - `@post.auto_user_name='Michael'` -> `@post.user == User(name:Michael)` + `@post.auto_user_name=='Michael'`
+ - Tries to find the record by using autocomplete on the corresponding model
+    @post.auto_user_name='Michael'
+    @post.user == User.find_by_autocomplete_name('Michael')
+    @post.auto_user_name == 'Michael'
  - unfound record -> nil
  - blank string -> nil
 
-Example for a pos with autocompleted user name:
+Example for a post with autocompleted user name:
 
     class User
       find_by_autocomplete :name #User.find_by_autocomplete_name
@@ -72,10 +75,12 @@ Example for a pos with autocompleted user name:
     class Post
       has_one :user
       autocomplete_for(:user,:name) #auto_user_name= + auto_user_name
+      OR
+      autocomplete_for(:user,:name,:name=>:creator) #auto_creator_name= + auto_creator_name (creator must a an User)
     end
 
 
-
-Copyright (c) 2008 Michael Grosser, released under the MIT license
-   
+Author
+======
+Copyright (c) 2008 Michael Grosser, released under the MIT license  
 Original: Copyright (c) 2007 David Heinemeier Hansson, released under the MIT license   
