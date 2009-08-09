@@ -250,10 +250,15 @@
       var pos = findPos(input);
       // either use the specified width, or autocalculate based on form element
       var iWidth = (options.width > 0) ? options.width : $input.width();
+      // results will be above input if it would not fit on the bottom of the window
+      var results_top = pos.y + input.offsetHeight;
+      if (results_top + $results.height() > $(window).height()) {
+        results_top = pos.y - $results.height();
+      }
       // reposition
       $results.css({
         width: parseInt(iWidth) + "px",
-        top: (pos.y + input.offsetHeight) + "px",
+        top: (results_top) + "px",
         left: pos.x + "px"
       }).show();
     };
