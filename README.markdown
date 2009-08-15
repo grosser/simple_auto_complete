@@ -1,5 +1,3 @@
-Goals
-=====
  - simple unobstrusive autocomplete
  - JS-library-independent
  - Controller and Model helpers
@@ -58,10 +56,11 @@ use any library you like
 
 Records (Optional)
 ------------------
- - Controller find works independent of this find
+ - converts an auto_complete form field to an association on assignment
  - Tries to find the record by using `find_by_autocomplete_xxx` on the records model
  - unfound record -> nil
  - blank string -> nil
+ - Controller find works independent of this find
 
 Example for a post with autocompleted user name:
 
@@ -71,13 +70,18 @@ Example for a post with autocompleted user name:
 
     class Post
       has_one :user
-      autocomplete_for(:user,:name) #auto_user_name= + auto_user_name
-      OR
-      autocomplete_for(:user,:name,:name=>:creator) #auto_creator_name= + auto_creator_name (creator must a an User)
+      autocomplete_for(:user, :name) #--> f.text_field :auto_user_name
+      # OR
+      autocomplete_for(:user, :name, :name=>:creator) #--> f.text_field :auto_creator_name (creator must a an User)
     end
 
 
-Author
-======
-Copyright (c) 2008 Michael Grosser, released under the MIT license  
+Authors
+=======
+
+###Contributors (alphabetical)
+ - [Bryan Ash](http://bryan-ash.blogspot.com/)
+ - [David Leal](http://github.com/david)
+
+Copyright (c) 2008 [Michael Grosser](http://pragmatig.wordpress.com), released under the MIT license  
 Original: Copyright (c) 2007 David Heinemeier Hansson, released under the MIT license   
