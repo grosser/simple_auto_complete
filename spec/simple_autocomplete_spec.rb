@@ -1,7 +1,7 @@
 require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe UsersController do
-  before do
+  before :each do
     @c = UsersController.new
     @c.stubs(:params).returns Hash.new
     @c.stubs(:render)
@@ -12,7 +12,7 @@ describe UsersController do
       class UserAddress < ActiveRecord::Base
         set_table_name :users
       end
-      UserAddress.expects(:find).with do |all,options|
+      UserAddress.expects(:scoped).with do |options|
         options[:conditions] == ['LOWER(full_name) LIKE ?','%hans%']
       end
       
@@ -33,7 +33,7 @@ describe UsersController do
     end
     
     it "oders ASC bey name" do
-      User.expects(:find).with do |all,options|
+      User.expects(:scoped).with do |options|
         options[:order] == 'name ASC'
       end
       @c.autocomplete_for_user_name
@@ -41,7 +41,7 @@ describe UsersController do
     
     it "finds by name" do
       @c.stubs(:params).returns :q=>'Hans'
-      User.expects(:find).with do |all,options|
+      User.expects(:scoped).with do |options|
         options[:conditions] == ['LOWER(name) LIKE ?','%hans%']
       end
       @c.autocomplete_for_user_name
@@ -70,7 +70,7 @@ describe UsersController do
       UsersController.autocomplete_for(:user,:name) do |items|
         items + 'xx'
       end
-      User.expects(:find).returns 'aa'
+      User.expects(:scoped).returns 'aa'
       @c.expects(:render).with {|hash| hash[:inline] == 'aaxx'}
       @c.autocomplete_for_user_name
     end
