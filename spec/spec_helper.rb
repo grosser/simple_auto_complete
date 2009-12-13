@@ -2,7 +2,7 @@
 require 'rubygems'
 require 'spec'
 require 'mocha'
-require 'activerecord'
+require 'active_record'
 require 'actionpack'
 require 'action_controller'
 
