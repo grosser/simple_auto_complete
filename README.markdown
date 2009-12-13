@@ -26,10 +26,16 @@ and sorts by the autocomplete field.
 
     autocomplete_for :user, :name, :limit => 15, :order => 'created_at DESC'
       
-With a block you can generate any output you need(passed into render :inline):
+With a block you can generate any output you need (passed into render :inline):
 
     autocomplete_for :post, :title do |items|
       items.map{|item| "#{item.title} -- #{item.id}"}.join("\n")
+    end
+
+The items passed into the block is an ActiveRecord scope allowing further scopes to be chained:
+
+    autocomplete_for :post, :title do |items|
+      items.for_user(current_user).map(&:title).join("\n")
     end
       
 View
