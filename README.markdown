@@ -5,8 +5,13 @@
 
 Install
 =======
+As Rails plugin:
     script/plugin install git://github.com/grosser/simple_auto_complete.git
-    copy javascripts/css from example folder OR use your own
+Or As Gem:
+    sudo gem install simple_auto_complete
+
+Then
+    copy javascripts/css from [example folder](http://github.com/grosser/simple_auto_complete/tree/master/example_js/) OR use your own
 
 
 Examples
@@ -84,10 +89,12 @@ Example for a post with autocompleted user name:
 
 Authors
 =======
+Inspired by DHH`s 'obstrusive' autocomplete_plugin.
 
 ###Contributors (alphabetical)
  - [Bryan Ash](http://bryan-ash.blogspot.com/)
  - [David Leal](http://github.com/david)
 
-Copyright (c) 2008 [Michael Grosser](http://pragmatig.wordpress.com), released under the MIT license  
-Original: Copyright (c) 2007 David Heinemeier Hansson, released under the MIT license   
+[Michael Grosser](http://pragmatig.wordpress.com)  
+grosser.michael@gmail.com  
+Hereby placed under public domain, do what you want, just do not hold me accountable...
