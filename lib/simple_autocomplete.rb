@@ -26,8 +26,8 @@ module SimpleAutocomplete
   #    autocomplete_for :post, :title do |items|
   #      items.map{|item| "#{item.title} -- #{item.id}"}.join("\n")
   #    end
-  module ControllerMethods
-    def autocomplete_for(object, method, options = {})
+  class ActionController::Base
+    def self.autocomplete_for(object, method, options = {})
       define_method("autocomplete_for_#{object}_#{method}") do
         model = object.to_s.camelize.constantize
         find_options = {
@@ -53,8 +53,8 @@ module SimpleAutocomplete
   # -> the auto_user_name field will be resolved to a User, using User.find_by_autocomplete_name(value)
   # -> Post has autocomplete_for('user','name')
   # -> User has find_by_autocomplete('name')
-  module RecordMethods
-    def autocomplete_for(object,method,options={})
+  class ActiveRecord::Base
+    def self.autocomplete_for(object,method,options={})
       name = options[:name] || object.to_s.underscore
       name = name.to_s
       object = object.to_s.camelize.constantize
@@ -72,7 +72,7 @@ module SimpleAutocomplete
       end
     end
 
-    def find_by_autocomplete(attr)
+    def self.find_by_autocomplete(attr)
       class_eval <<-end_eval
         def self.find_by_autocomplete_#{attr}(value)
           return nil if value.blank?
