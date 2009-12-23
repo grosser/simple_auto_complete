@@ -1,10 +1,13 @@
-require File.expand_path("spec_helper", File.dirname(__FILE__))
+require "spec/spec_helper"
+
+class UsersController < ActionController::Base
+end
 
 describe UsersController do
   before :each do
     @c = UsersController.new
-    @c.stubs(:params).returns Hash.new
-    @c.stubs(:render)
+    @c.stub!(:params).and_return {}
+    @c.stub!(:render)
   end
   
   describe 'basics' do
@@ -12,11 +15,11 @@ describe UsersController do
       class UserAddress < ActiveRecord::Base
         set_table_name :users
       end
-      UserAddress.expects(:scoped).with do |options|
+      UserAddress.should_receive(:scoped).with do |options|
         options[:conditions] == ['LOWER(full_name) LIKE ?','%hans%']
       end
       
-      @c.stubs(:params).returns :q=>'Hans'
+      @c.stub!(:params).and_return :q=>'Hans'
       UsersController.autocomplete_for(:user_address,:full_name)
       @c.autocomplete_for_user_address_full_name
     end
@@ -28,20 +31,20 @@ describe UsersController do
     end
     
     it "renders the items inline" do
-      @c.expects(:render).with {|hash| hash[:inline] =~ /@items.map \{|item| h(item.name)\}.uniq.join(\'\n\')/}
+      @c.should_receive(:render).with {|hash| hash[:inline] =~ /@items.map \{|item| h(item.name)\}.uniq.join(\'\n\')/}
       @c.autocomplete_for_user_name
     end
     
     it "oders ASC bey name" do
-      User.expects(:scoped).with do |options|
+      User.should_receive(:scoped).with do |options|
         options[:order] == 'name ASC'
       end
       @c.autocomplete_for_user_name
     end
     
     it "finds by name" do
-      @c.stubs(:params).returns :q=>'Hans'
-      User.expects(:scoped).with do |options|
+      @c.stub!(:params).and_return :q=>'Hans'
+      User.should_receive(:scoped).with do |options|
         options[:conditions] == ['LOWER(name) LIKE ?','%hans%']
       end
       @c.autocomplete_for_user_name
@@ -62,7 +65,7 @@ describe UsersController do
       UsersController.autocomplete_for(:user,:name) do |items|
         items.should == ['xx']
       end
-      User.expects(:find).returns ['xx']
+      User.should_receive(:find).and_return ['xx']
       @c.autocomplete_for_user_name
     end
     
@@ -70,8 +73,8 @@ describe UsersController do
       UsersController.autocomplete_for(:user,:name) do |items|
         items + 'xx'
       end
-      User.expects(:scoped).returns 'aa'
-      @c.expects(:render).with {|hash| hash[:inline] == 'aaxx'}
+      User.should_receive(:scoped).and_return 'aa'
+      @c.should_receive(:render).with {|hash| hash[:inline] == 'aaxx'}
       @c.autocomplete_for_user_name
     end
   end

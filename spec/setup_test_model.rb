@@ -15,7 +15,3 @@ end
 
 class User < ActiveRecord::Base
 end
-
-# create controller
-class UsersController < ActionController::Base
-end
