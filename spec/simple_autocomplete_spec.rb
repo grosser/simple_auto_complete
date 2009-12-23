@@ -1,5 +1,11 @@
 require "spec/spec_helper"
 
+describe SimpleAutocomplete do
+  it "has a version" do
+    SimpleAutocomplete::VERSION.should =~ /^\d+\.\d+\.\d+$/
+  end
+end
+
 class UsersController < ActionController::Base
 end
 
