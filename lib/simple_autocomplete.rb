@@ -1,5 +1,4 @@
-module Grosser
-  module Autocomplete      
+  module SimpleAutocomplete
     #Example:
     #
     #  # Controller
@@ -86,4 +85,3 @@ module Grosser
       end
     end
   end
-end

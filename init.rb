@@ -1,3 +1,3 @@
-require 'grosser/autocomplete'
-ActionController::Base.send :extend, Grosser::Autocomplete::ControllerMethods
-ActiveRecord::Base.send :extend, Grosser::Autocomplete::RecordMethods
+require 'simple_autocomplete'
+ActionController::Base.send :extend, SimpleAutocomplete::ControllerMethods
+ActiveRecord::Base.send :extend, SimpleAutocomplete::RecordMethods
