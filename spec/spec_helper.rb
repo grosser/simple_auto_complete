@@ -3,7 +3,7 @@ require 'rubygems'
 require 'spec'
 require 'mocha'
 require 'active_record'
-require 'actionpack'
+require 'action_pack'
 require 'action_controller'
 
 $LOAD_PATH << File.expand_path("../lib", File.dirname(__FILE__))
