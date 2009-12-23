@@ -38,37 +38,36 @@ module SimpleAutocomplete
 
         @items = model.scoped(find_options)
 
-        if block_given?
-          out = yield(@items)
+        out = if block_given?
+          yield(@items)
         else
-          out = %Q[<%= @items.map {|item| h(item.#{method})}.uniq.join("\n")%>]
+          %Q[<%= @items.map {|item| h(item.#{method})}.uniq.join("\n")%>]
         end
         render :inline => out
       end
     end
   end
 
-  # Store the value of the autocomplete field as record
+  # Store the value of the autocomplete field as association
   # autocomplete_for('user','name')
   # -> the auto_user_name field will be resolved to a User, using User.find_by_autocomplete_name(value)
   # -> Post has autocomplete_for('user','name')
   # -> User has find_by_autocomplete('name')
   class ActiveRecord::Base
-    def self.autocomplete_for(object,method,options={})
-      name = options[:name] || object.to_s.underscore
+    def self.autocomplete_for(model, method, options={})
+      name = options[:name] || model.to_s.underscore
       name = name.to_s
-      object = object.to_s.camelize.constantize
+      model = model.to_s.camelize.constantize
 
-      #auto_user_name=
+      #auto_user_name= "Hans"
       define_method("auto_#{name}_#{method}=") do |value|
-        found = object.send("find_by_autocomplete_"+method,value)
-        self.send(name+'=', found)
+        found = model.send("find_by_autocomplete_"+method, value)
+        send(name+'=', found)
       end
 
       #auto_user_name
       define_method("auto_#{name}_#{method}") do
-        return send(name).send(method) if send(name)
-        ""
+        send(name) ? send(name).send(method) : ""
       end
     end
 
