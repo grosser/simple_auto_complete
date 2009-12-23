@@ -1,8 +1,10 @@
-require 'rubygems'
-require 'active_record'
-require 'active_record/fixtures'
+# connect
+ActiveRecord::Base.establish_connection(
+  :adapter => "sqlite3",
+  :database => ":memory:"
+)
 
-#create model table
+# create model
 ActiveRecord::Schema.define(:version => 1) do
   create_table "users" do |t|
     t.string "full_name"
@@ -11,10 +13,9 @@ ActiveRecord::Schema.define(:version => 1) do
   end
 end
 
-#create model
 class User < ActiveRecord::Base
 end
 
-#create controller
+# create controller
 class UsersController < ActionController::Base
 end
