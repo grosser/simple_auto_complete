@@ -59,10 +59,16 @@ module SimpleAutocomplete
       name = name.to_s
       model = model.to_s.camelize.constantize
 
+      # is the correct finder defined <-> warn users
+      finder = "find_by_autocomplete_#{method}"
+      unless model.respond_to? finder
+        raise "#{model} does not respond to #{finder}, maybe you forgot to add auto_complete_for(:#{method}) to #{model}?"
+      end
+
       #auto_user_name= "Hans"
       define_method("auto_#{name}_#{method}=") do |value|
-        found = model.send("find_by_autocomplete_"+method, value)
-        send(name+'=', found)
+        found = model.send(finder, value)
+        send("#{name}=", found)
       end
 
       #auto_user_name

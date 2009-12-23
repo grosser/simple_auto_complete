@@ -3,7 +3,7 @@ require "spec/spec_helper"
 class UsersController < ActionController::Base
 end
 
-describe UsersController do
+describe 'Controller extensions' do
   before do
     @c = UsersController.new
     @c.stub!(:params).and_return Hash.new
@@ -73,6 +73,51 @@ describe UsersController do
       User.should_receive(:scoped).and_return 'aa'
       @c.should_receive(:render).with(hash_including(:inline => 'aaxx'))
       @c.autocomplete_for_user_name
+    end
+  end
+end
+
+describe 'Model extensions' do
+  it "warns raises when a needed finder is not defined" do
+    lambda{
+      class XPost < ActiveRecord::Base
+        set_table_name :posts
+        autocomplete_for :user, :name
+      end
+    }.should raise_error(/User does not respond to find_by_autocomplete_name/)
+  end
+
+  describe "auto_{association}_{attribute}" do
+    it "is blank when associated is not present" do
+      Post.new.auto_author_name.should == ''
+    end
+
+    it "is the attribute of the associated" do
+      Post.new(:author => Author.new(:name => 'xxx')).auto_author_name.should == 'xxx'
+    end
+  end
+
+  describe "auto_{association}_{attribute}=" do
+    before do
+      Author.delete_all
+      Author.create!(:name => 'Mike')
+      @pete = Author.create!(:name => 'Pete')
+      Author.create!(:name => '')
+    end
+
+    it "does nothing when blank is set" do
+      p = Post.new(:auto_author_name => '')
+      p.author.should == nil
+    end
+
+    it "does nothing when nil is net" do
+      p = Post.new(:auto_author_name => nil)
+      p.author.should == nil
+    end
+
+    it "finds the correct associated and sets it" do
+      p = Post.new(:auto_author_name => 'Pete')
+      p.author.should == @pete
     end
   end
 end
