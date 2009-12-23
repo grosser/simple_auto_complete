@@ -10,8 +10,7 @@ As Rails plugin:
 Or As Gem:
     sudo gem install simple_autocomplete
 
-Then
-    copy javascripts/css from [example folder](http://github.com/grosser/simple_auto_complete/tree/master/example_js/) OR use your own
+Then copy javascripts/css from [example folder](http://github.com/grosser/simple_auto_complete/tree/master/example_js/) OR use your own
 
 
 Examples
