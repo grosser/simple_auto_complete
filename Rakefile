@@ -4,7 +4,7 @@ Spec::Rake::SpecTask.new {|t| t.spec_opts = ['--color']}
 
 begin
   require 'jeweler'
-  project_name = 'simple_auto_complete'
+  project_name = 'simple_autocomplete'
   Jeweler::Tasks.new do |gem|
     gem.name = project_name
     gem.summary = "Rails: Simple, customizable, unobstrusive - auto complete"
