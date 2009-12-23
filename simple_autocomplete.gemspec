@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
      "example_js/stylesheets/jquery.autocomplete.css",
      "init.rb",
      "lib/simple_autocomplete.rb",
-     "simple_auto_complete.gemspec",
+     "simple_autocomplete.gemspec",
      "spec/setup_test_model.rb",
      "spec/simple_autocomplete_spec.rb",
      "spec/spec_helper.rb"
