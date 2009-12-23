@@ -6,7 +6,7 @@ end
 describe UsersController do
   before :each do
     @c = UsersController.new
-    @c.stub!(:params).and_return {}
+    @c.stub!(:params).and_return Hash.new
     @c.stub!(:render)
   end
   
