@@ -57,38 +57,33 @@ end
 # -> Post has autocomplete_for('user','name')
 # -> User has find_by_autocomplete('name')
 class ActiveRecord::Base
-  def self.autocomplete_for(model, method, options={})
+  def self.autocomplete_for(model, attribute, options={})
     name = options[:name] || model.to_s.underscore
     name = name.to_s
     model = model.to_s.camelize.constantize
 
     # is the correct finder defined <-> warn users
-    finder = "find_by_autocomplete_#{method}"
+    finder = "find_by_autocomplete_#{attribute}"
     unless model.respond_to? finder
-      raise "#{model} does not respond to #{finder}, maybe you forgot to add auto_complete_for(:#{method}) to #{model}?"
+      raise "#{model} does not respond to #{finder}, maybe you forgot to add auto_complete_for(:#{attribute}) to #{model}?"
     end
 
     #auto_user_name= "Hans"
-    define_method("auto_#{name}_#{method}=") do |value|
-      found = model.send(finder, value)
-      send("#{name}=", found)
+    define_method "auto_#{name}_#{attribute}=" do |value|
+      send "#{name}=", model.send(finder, value)
     end
 
     #auto_user_name
-    define_method("auto_#{name}_#{method}") do
-      send(name) ? send(name).send(method) : ""
+    define_method "auto_#{name}_#{attribute}" do
+      send(name).try(:send, attribute).to_s
     end
   end
 
   def self.find_by_autocomplete(attr)
-    class_eval <<-end_eval
-      def self.find_by_autocomplete_#{attr}(value)
-        return nil if value.blank?
-        self.find(
-         :first,
-         :conditions => [ "LOWER(#{attr}) = ?", value.to_s.downcase ]
-        )
-      end
-    end_eval
+    metaclass = (class << self; self; end)
+    metaclass.send(:define_method, "find_by_autocomplete_#{attr}") do |value|
+      return if value.blank?
+      self.first(:conditions => [ "LOWER(#{attr}) = ?", value.to_s.downcase ])
+    end
   end
 end
