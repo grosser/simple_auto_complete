@@ -132,4 +132,19 @@ describe 'Model extensions' do
       p.author.should == @pete
     end
   end
+
+  describe "find_by_autocomplete_{attribute}" do
+    before do
+      Author.delete_all
+      @author = Author.create!(:name => 'john')
+    end
+
+    it "finds when possible" do
+      Author.find_by_autocomplete_name('john').should == @author
+    end
+
+    it "returns nil when nothing was found" do
+      Author.find_by_autocomplete_name('bob').should == nil
+    end
+  end
 end
