@@ -65,10 +65,16 @@ describe 'Controller extensions' do
     end
     
     it "passes found items to the block" do
+      User.delete_all
+      u1 = User.create!(:name => 'xxx')
+      User.create!(:name => 'zzz')
+      u3 = User.create!(:name => 'xxx')
+
       UsersController.autocomplete_for(:user, :name) do |items|
-        items.should == ['xx']
+        items.to_a.should =~ [u1, u3]
       end
-      User.should_receive(:find).and_return ['xx']
+
+      @c.stub!(:params).and_return :q=>'xxx'
       @c.autocomplete_for_user_name
     end
     
