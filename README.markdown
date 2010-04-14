@@ -44,7 +44,7 @@ The items passed into the block is an ActiveRecord scope allowing further scopes
       
 View
 ----
-    <%= f.text_field :auto_user_name, :class => 'autocomplete', 'autocomplete_url'=>autocomplete_for_user_name_users_path %>
+    <%= f.text_field :auto_user_name, :class => 'autocomplete', 'data-autocomplete-url'=>autocomplete_for_user_name_users_path %>
 
 Routes
 ------
@@ -60,7 +60,7 @@ use any library you like
       //autocomplete
       $('input.autocomplete').each(function(){
         var $input = $(this);
-        $input.autocomplete($input.attr('autocomplete_url'));
+        $input.autocomplete($input.attr('data-autocomplete-url'));
       });
     });
 

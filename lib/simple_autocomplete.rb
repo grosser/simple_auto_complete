@@ -10,7 +10,7 @@ end
 #  end
 #
 #  # View
-#  <%= text_field :post, title, :class => 'autocomplete', 'autocomplete_url'=>autocomplete_for_post_title_posts_path %>
+#  <%= text_field :post, title, :class => 'autocomplete', 'data-autocomplete-url'=>autocomplete_for_post_title_posts_path %>
 #
 #  #routes.rb
 #  map.resources :users, :collection => { :autocomplete_for_user_name => :get}
