@@ -93,6 +93,7 @@ Inspired by DHH`s 'obstrusive' autocomplete_plugin.
 ###Contributors (alphabetical)
  - [Bryan Ash](http://bryan-ash.blogspot.com/)
  - [David Leal](http://github.com/david)
+ - [Splendeo](http://www.splendeo.es)
 
 [Michael Grosser](http://pragmatig.wordpress.com)  
 grosser.michael@gmail.com  
