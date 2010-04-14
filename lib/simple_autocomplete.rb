@@ -30,7 +30,7 @@ end
 #      items.map{|item| "#{item.title} -- #{item.id}"}.join("\n")
 #    end
 class ActionController::Base
-  def self.autocomplete_for(object, method, options = {})
+  def self.autocomplete_for(object, method, options = {}, &block)
     define_method("autocomplete_for_#{object}_#{method}") do
       model = object.to_s.camelize.constantize
       find_options = {
@@ -42,7 +42,7 @@ class ActionController::Base
       @items = model.scoped(find_options)
 
       out = if block_given?
-        yield(@items)
+        instance_exec @items, &block
       else
         %Q[<%= @items.map {|item| h(item.#{method})}.uniq.join("\n")%>]
       end

@@ -7,6 +7,9 @@ describe SimpleAutocomplete do
 end
 
 class UsersController < ActionController::Base
+  def a_instance_method
+    self.class.a_class_method
+  end
 end
 
 describe 'Controller extensions' do
@@ -84,6 +87,14 @@ describe 'Controller extensions' do
       end
       User.should_receive(:scoped).and_return 'aa'
       @c.should_receive(:render).with(hash_including(:inline => 'aaxx'))
+      @c.autocomplete_for_user_name
+    end
+
+    it "has block in controllers scope" do
+      UsersController.should_receive(:a_class_method)
+      UsersController.autocomplete_for(:user, :name) do |items|
+        a_instance_method
+      end
       @c.autocomplete_for_user_name
     end
   end
