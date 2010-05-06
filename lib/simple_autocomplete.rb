@@ -30,11 +30,22 @@ end
 #      items.map{|item| "#{item.title} -- #{item.id}"}.join("\n")
 #    end
 class ActionController::Base
-  def self.autocomplete_for(object, method, options = {}, &block)
-    define_method("autocomplete_for_#{object}_#{method}") do
+  def self.autocomplete_for(object, methods, options = {}, &block)
+    method_name = methods.class == Array ? methods.map{|m| m}.join('_') : methods
+    define_method("autocomplete_for_#{object}_#{method_name}") do
+      if methods.class == Array
+        method = methods[0]
+        conditions = []
+        conditions[0] = methods.map{|m| "LOWER(#{m}) LIKE ? "}.join(" OR ")
+        methods.each{|m| conditions << '%'+params[:q].to_s.downcase + '%'}
+      else
+        method = methods
+        conditions = [ "LOWER(#{method}) LIKE ?", '%'+params[:q].to_s.downcase + '%' ]
+      end
+
       model = object.to_s.camelize.constantize
       find_options = {
-        :conditions => [ "LOWER(#{method}) LIKE ?", '%'+params[:q].to_s.downcase + '%' ],
+        :conditions => conditions,
         :order => "#{method} ASC",
         :limit => 10
         }.merge!(options)
