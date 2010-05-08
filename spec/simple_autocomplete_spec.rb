@@ -24,11 +24,7 @@ describe 'Controller extensions' do
       class UserAddress < ActiveRecord::Base
         set_table_name :users
       end
-
-      UserAddress.should_receive(:scoped).with do |options|
-        options[:conditions] == ['LOWER(full_name) LIKE ?','%hans%']
-      end
-      
+      UserAddress.should_receive(:scoped).with hash_including(:conditions => ['LOWER(full_name) LIKE ?','%hans%'])
       @c.stub!(:params).and_return :q=>'Hans'
       UsersController.autocomplete_for(:user_address,:full_name)
       @c.autocomplete_for_user_address_full_name
@@ -54,6 +50,28 @@ describe 'Controller extensions' do
       @c.stub!(:params).and_return :q=>'Hans'
       User.should_receive(:scoped).with(hash_including(:conditions => ['LOWER(name) LIKE ?','%hans%']))
       @c.autocomplete_for_user_name
+    end
+  end
+
+  describe "autocomplete with :match" do
+    before do
+      UsersController.autocomplete_for(:user, :name, :match => [:full_name, :name])
+    end
+
+    it "renders the items inline with method" do
+      @c.should_receive(:render).with {|hash| hash[:inline] =~ /@items.map \{|item| h(item.full_name)\}.uniq.join(\'\n\')/}
+      @c.autocomplete_for_user_name(:match => [:full_name, :name])
+    end
+
+    it "orders ASC by match" do
+      User.should_receive(:scoped).with(hash_including(:order => 'full_name ASC'))
+      @c.autocomplete_for_user_name(:match => [:full_name, :name])
+    end
+
+    it "finds by match" do
+      @c.stub!(:params).and_return :q=>'Hans'
+      User.should_receive(:scoped).with(hash_including(:conditions => ["LOWER(full_name) LIKE ? OR LOWER(name) LIKE ?", "%hans%", "%hans%"]))
+      @c.autocomplete_for_user_name(:match => [:full_name, :name])
     end
   end
   
