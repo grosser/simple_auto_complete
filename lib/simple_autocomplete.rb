@@ -2,33 +2,7 @@ module SimpleAutocomplete
   VERSION = File.read( File.join(File.dirname(__FILE__),'..','VERSION') ).strip
 end
 
-#Example:
-#
-#  # Controller
-#  class BlogController < ApplicationController
-#    autocomplete_for :post, :title
-#  end
-#
-#  # View
-#  <%= text_field :post, title, :class => 'autocomplete', 'data-autocomplete-url'=>autocomplete_for_post_title_posts_path %>
-#
-#  #routes.rb
-#  map.resources :users, :collection => { :autocomplete_for_user_name => :get}
-#
-#  # Options
-#  By default, autocomplete_for limits the results to 10 entries,
-#  and sorts by the given field.
-#
-#  autocomplete_for takes a third parameter, an options hash to
-#  the find method used to search for the records:
-#
-#    autocomplete_for :post, :title, :limit => 15, :order => 'created_at DESC'
-#
-#  # Block
-#  with a block you can generate any output you need(passed into render :inline):
-#    autocomplete_for :post, :title do |items|
-#      items.map{|item| "#{item.title} -- #{item.id}"}.join("\n")
-#    end
+# see Readme for details
 class ActionController::Base
   def self.autocomplete_for(object, method, options = {}, &block)
     options = options.dup
@@ -62,6 +36,7 @@ end
 # -> the auto_user_name field will be resolved to a User, using User.find_by_autocomplete_name(value)
 # -> Post has autocomplete_for('user','name')
 # -> User has find_by_autocomplete('name')
+# see Readme for more details
 class ActiveRecord::Base
   def self.autocomplete_for(model, attribute, options={})
     name = options[:name] || model.to_s.underscore

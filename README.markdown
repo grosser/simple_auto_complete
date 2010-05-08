@@ -29,11 +29,17 @@ and sorts by the autocomplete field.
 `autocomplete_for` takes a third parameter, an options hash which is used in the find:
 
     autocomplete_for :user, :name, :limit => 15, :order => 'created_at DESC'
-      
-With a block you can generate any output you need (passed into render :inline):
+
+With :match option you can filter for different columns
+
+    # find and order with firstname/lastname
+    # return full_name of records for auto-completion
+    autocomplete_for :user, :full_name, :match => [:firstname, :lastname]
+
+With a block you can generate any output you need (ERB allowed):
 
     autocomplete_for :post, :title do |items|
-      items.map{|item| "#{item.title} -- #{item.id}"}.join("\n")
+      items.map{|item| "#{item.title} -- #{item.id} <%= Time.now %>"}.join("\n")
     end
 
 The items passed into the block is an ActiveRecord scope allowing further scopes to be chained:
@@ -91,8 +97,9 @@ Authors
 Inspired by DHH`s 'obstrusive' autocomplete_plugin.
 
 ###Contributors (alphabetical)
- - [Bryan Ash](http://bryan-ash.blogspot.com/)
+ - [Bryan Ash](http://bryan-ash.blogspot.com)
  - [David Leal](http://github.com/david)
+ - [mlessard](http://github.com/mlessard)
  - [Splendeo](http://www.splendeo.es)
 
 [Michael Grosser](http://pragmatig.wordpress.com)  
