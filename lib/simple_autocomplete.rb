@@ -30,9 +30,10 @@ end
 #      items.map{|item| "#{item.title} -- #{item.id}"}.join("\n")
 #    end
 class ActionController::Base
-  def self.autocomplete_for(object, methods, options = {}, &block)
-    methods = [*methods]
-    define_method("autocomplete_for_#{object}_#{methods * '_'}") do
+  def self.autocomplete_for(object, method, options = {}, &block)
+    options = options.dup
+    define_method("autocomplete_for_#{object}_#{method}") do
+      methods = options.delete(:match) || [*method]
       condition = methods.map{|m| "LOWER(#{m}) LIKE ?"} * " OR "
       values = methods.map{|m| "%#{params[:q].to_s.downcase}%"}
       conditions = [condition, *values]
