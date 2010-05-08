@@ -31,22 +31,16 @@ end
 #    end
 class ActionController::Base
   def self.autocomplete_for(object, methods, options = {}, &block)
-    method_name = methods.class == Array ? methods.map{|m| m}.join('_') : methods
-    define_method("autocomplete_for_#{object}_#{method_name}") do
-      if methods.class == Array
-        method = methods[0]
-        conditions = []
-        conditions[0] = methods.map{|m| "LOWER(#{m}) LIKE ? "}.join(" OR ")
-        methods.each{|m| conditions << '%'+params[:q].to_s.downcase + '%'}
-      else
-        method = methods
-        conditions = [ "LOWER(#{method}) LIKE ?", '%'+params[:q].to_s.downcase + '%' ]
-      end
+    methods = [*methods]
+    define_method("autocomplete_for_#{object}_#{methods * '_'}") do
+      condition = methods.map{|m| "LOWER(#{m}) LIKE ?"} * " OR "
+      values = methods.map{|m| "%#{params[:q].to_s.downcase}%"}
+      conditions = [condition, *values]
 
       model = object.to_s.camelize.constantize
       find_options = {
         :conditions => conditions,
-        :order => "#{method} ASC",
+        :order => "#{methods.first} ASC",
         :limit => 10
         }.merge!(options)
 
@@ -55,7 +49,7 @@ class ActionController::Base
       out = if block_given?
         instance_exec @items, &block
       else
-        %Q[<%= @items.map {|item| h(item.#{method})}.uniq.join("\n")%>]
+        %Q[<%= @items.map {|item| h(item.#{methods.first})}.uniq.join("\n")%>]
       end
       render :inline => out
     end
