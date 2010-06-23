@@ -176,4 +176,34 @@ describe 'Model extensions' do
       Author.find_by_autocomplete_name('bob').should == nil
     end
   end
+  
+  describe "add_{name}_by_autocomplete" do
+    it "is blank when associated is not present" do
+      Post.new.add_tag_by_autocomplete.should == nil
+    end
+  end
+
+  describe "add_{name}_by_autocomplete=" do
+    before do
+      Tag.delete_all
+      Tag.create!(:name => 'economics')
+      @tag = Tag.create!(:name => 'politics')
+      Tag.create!(:name => '')
+    end
+
+    it "does nothing when blank is set" do
+      p = Post.new(:add_tag_by_autocomplete => '' )
+      p.tags.should be_empty
+    end
+
+    it "does nothing when nil is net" do
+      p = Post.new(:add_tag_by_autocomplete => nil)
+      p.tags.should be_empty
+    end
+
+    it "finds the correct associated and sets it" do
+      p = Post.new(:add_tag_by_autocomplete => 'politics')
+      p.tags.first.should == @tag
+    end
+  end
 end

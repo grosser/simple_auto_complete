@@ -85,7 +85,7 @@ class ActiveRecord::Base
 
     #add_user_by_autocomplete== "Hans"
     define_method "add_#{name}_by_autocomplete=" do |value|
-      send(name.pluralize).send('<<', model.send(finder, value))
+      send(name.pluralize).send('<<', model.send(finder, value)) if model.send(finder, value)
     end
 
     #just to avoid a method missing error when rendering the field
