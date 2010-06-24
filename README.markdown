@@ -91,6 +91,11 @@ Example for a post with autocompleted user name:
       autocomplete_for(:user, :name, :name=>:creator) #--> f.text_field :auto_creator_name (creator must a an User)
     end
 
+    class Group
+      has_many :users
+      add_by_autocomplete(:user, :name) #--> f.text_field :add_by_auto_user_name
+    end
+
 
 Authors
 =======

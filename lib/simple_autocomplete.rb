@@ -31,27 +31,14 @@ class ActionController::Base
   end
 end
 
-# Store the value of the autocomplete field as association
-# autocomplete_for('user','name')
-# -> the auto_user_name field will be resolved to a User, using User.find_by_autocomplete_name(value)
-# -> Post has autocomplete_for('user','name')
-# -> User has find_by_autocomplete('name')
-# add_by_autocomplete('user','name) -- for has_many() association, like on github's collaborators search
-# -> Post has add_by_autocomplete('user','name) 
-# -> rest works the same as autocomplete_for
-# -> TODO: add tests
-# see Readme for more details
 class ActiveRecord::Base
+  # Store autocomplete field as association
+  # in post.rb: autocomplete_for('user', 'name')
+  # in user.rb add find_by_autocomplete :name
+  # Post.first.auto_user_name=(value) will be resolved to a User, using User.find_by_autocomplete_name(value)
   def self.autocomplete_for(model, attribute, options={})
-    name = options[:name] || model.to_s.underscore
-    name = name.to_s
-    model = model.to_s.camelize.constantize
-
-    # is the correct finder defined <-> warn users
-    finder = "find_by_autocomplete_#{attribute}"
-    unless model.respond_to? finder
-      raise "#{model} does not respond to #{finder}, maybe you forgot to add auto_complete_for(:#{attribute}) to #{model}?"
-    end
+    model, name = autocomplete_model_and_name(model, options[:name])
+    finder = autocomplete_finder_for(model, attribute)
 
     #auto_user_name= "Hans"
     define_method "auto_#{name}_#{attribute}=" do |value|
@@ -64,33 +51,46 @@ class ActiveRecord::Base
     end
   end
 
-  def self.find_by_autocomplete(attr)
+  # Add association by autocomplete field
+  # in post.rb add_by_autocomplete('user', 'name)  for has_many() association, like on github's collaborators search
+  # in user.rb add find_by_autocomplete :name
+  # Post.first.add_bu_auto_user_name=(value) will be resolved to a User, using User.find_by_autocomplete_name(value)
+  def self.add_by_autocomplete(model, attribute, options={})
+    model, name = autocomplete_model_and_name(model, options[:name])
+    finder = autocomplete_finder_for(model, attribute)
+
+    #add_user_by_autocomplete= "Hans"
+    define_method "add_by_auto_#{name}_#{attribute}=" do |value|
+      send(name.pluralize).send('<<', model.send(finder, value)) if value and !value.empty?
+    end
+
+    # avoid method missing error when rendering a form field
+    define_method("add_by_auto_#{name}_#{attribute}"){}
+  end
+
+  def self.find_by_autocomplete(attribute)
     metaclass = (class << self; self; end)
-    metaclass.send(:define_method, "find_by_autocomplete_#{attr}") do |value|
+    metaclass.send(:define_method, "find_by_autocomplete_#{attribute}") do |value|
       return if value.blank?
-      self.first(:conditions => [ "LOWER(#{attr}) = ?", value.to_s.downcase ])
+      self.first(:conditions => [ "LOWER(#{attribute}) = ?", value.to_s.downcase ])
     end
   end
-  
-  def self.add_by_autocomplete(model, attribute, options={})
+
+  private
+
+  def self.autocomplete_model_and_name(model, name)
     name = options[:name] || model.to_s.underscore
     name = name.to_s
     model = model.to_s.camelize.constantize
+    [model, name]
+  end
 
-    # is the correct finder defined <-> warn users
+  # is the correct finder defined <-> warn users
+  def self.autocomplete_finder_for(model, attribute)
     finder = "find_by_autocomplete_#{attribute}"
     unless model.respond_to? finder
       raise "#{model} does not respond to #{finder}, maybe you forgot to add auto_complete_for(:#{attribute}) to #{model}?"
     end
-
-    #add_user_by_autocomplete== "Hans"
-    define_method "add_#{name}_by_autocomplete=" do |value|
-      send(name.pluralize).send('<<', model.send(finder, value)) if value and !value.empty?
-    end
-
-    #just to avoid a method missing error when rendering the field
-    define_method "add_#{name}_by_autocomplete" do
-      #send(name).try(:send, attribute).to_s
-    end
+    finder
   end
 end

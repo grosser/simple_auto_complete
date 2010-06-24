@@ -1,3 +1,4 @@
+
 require "spec/spec_helper"
 
 describe SimpleAutocomplete do
@@ -177,13 +178,13 @@ describe 'Model extensions' do
     end
   end
   
-  describe "add_{name}_by_autocomplete" do
+  describe "add_by_auto_{name}_{attribute}" do
     it "is always nil when associated is not present" do
-      Post.new.add_tag_by_autocomplete.should == nil
+      Post.new.add_by_auto_tag_name.should == nil
     end
   end
 
-  describe "add_{name}_by_autocomplete=" do
+  describe "add_by_auto_{name}_{attribute}=" do
     before do
       Tag.delete_all
       Tag.create!(:name => 'economics')
@@ -192,17 +193,17 @@ describe 'Model extensions' do
     end
 
     it "does nothing when blank is set" do
-      p = Post.new(:add_tag_by_autocomplete => '' )
+      p = Post.new(:add_by_auto_tag_name => '' )
       p.tags.should be_empty
     end
 
     it "does nothing when nil is net" do
-      p = Post.new(:add_tag_by_autocomplete => nil)
+      p = Post.new(:add_by_auto_tag_name => nil)
       p.tags.should be_empty
     end
 
     it "finds the correct associated and sets it" do
-      p = Post.new(:add_tag_by_autocomplete => 'politics')
+      p = Post.new(:add_by_auto_tag_name => 'politics')
       p.tags.should == [@tag]
     end
   end
