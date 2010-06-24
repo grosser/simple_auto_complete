@@ -178,7 +178,7 @@ describe 'Model extensions' do
   end
   
   describe "add_{name}_by_autocomplete" do
-    it "is blank when associated is not present" do
+    it "is always nil when associated is not present" do
       Post.new.add_tag_by_autocomplete.should == nil
     end
   end
@@ -203,7 +203,7 @@ describe 'Model extensions' do
 
     it "finds the correct associated and sets it" do
       p = Post.new(:add_tag_by_autocomplete => 'politics')
-      p.tags.first.should == @tag
+      p.tags.should == [@tag]
     end
   end
 end
