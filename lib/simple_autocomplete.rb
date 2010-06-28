@@ -79,7 +79,7 @@ class ActiveRecord::Base
   private
 
   def self.autocomplete_model_and_name(model, name)
-    name = options[:name] || model.to_s.underscore
+    name = name || model.to_s.underscore
     name = name.to_s
     model = model.to_s.camelize.constantize
     [model, name]
