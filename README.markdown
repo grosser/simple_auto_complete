@@ -105,6 +105,7 @@ Inspired by DHH`s 'obstrusive' autocomplete_plugin.
  - [Bryan Ash](http://bryan-ash.blogspot.com)
  - [David Leal](http://github.com/david)
  - [mlessard](http://github.com/mlessard)
+ - [Oliver Azevedo Barnes](http://github.com/oliverbarnes)
  - [Splendeo](http://www.splendeo.es)
 
 [Michael Grosser](http://pragmatig.wordpress.com)  
