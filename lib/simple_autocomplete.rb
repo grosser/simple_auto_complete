@@ -5,9 +5,8 @@ end
 # see Readme for details
 class ActionController::Base
   def self.autocomplete_for(object, method, options = {}, &block)
-    options = options.dup
     define_method("autocomplete_for_#{object}_#{method}") do
-      methods = options.delete(:match) || [*method]
+      methods = options[:match] || [*method]
       condition = methods.map{|m| "LOWER(#{m}) LIKE ?"} * " OR "
       values = methods.map{|m| "%#{params[:q].to_s.downcase}%"}
       conditions = [condition, *values]
@@ -17,7 +16,7 @@ class ActionController::Base
         :conditions => conditions,
         :order => "#{methods.first} ASC",
         :limit => 10
-        }.merge!(options)
+        }.merge!(options.except(:match))
 
       @items = model.scoped(find_options)
 
