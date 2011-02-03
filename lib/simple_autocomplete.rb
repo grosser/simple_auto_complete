@@ -5,6 +5,8 @@ end
 # see Readme for details
 class ActionController::Base
   def self.autocomplete_for(object, method, options = {}, &block)
+    # do not modify options with e.g. delete
+    # https://github.com/grosser/simple_auto_complete/pull/6
     define_method("autocomplete_for_#{object}_#{method}") do
       methods = options[:match] || [*method]
       condition = methods.map{|m| "LOWER(#{m}) LIKE ?"} * " OR "

@@ -101,12 +101,14 @@ Authors
 =======
 Inspired by DHH`s 'obstrusive' autocomplete_plugin.
 
-###Contributors (alphabetical)
+### [Contributors](http://github.com/grosser/simple_auto_complete/contributors)
  - [Bryan Ash](http://bryan-ash.blogspot.com)
  - [David Leal](http://github.com/david)
  - [mlessard](http://github.com/mlessard)
  - [Oliver Azevedo Barnes](http://github.com/oliverbarnes)
  - [Splendeo](http://www.splendeo.es)
+ - [Franco Catena](https://github.com/francocatena)
+ 
 
 [Michael Grosser](http://grosser.it)  
 michael@grosser.it  
