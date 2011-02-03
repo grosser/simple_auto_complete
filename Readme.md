@@ -6,9 +6,9 @@
 Install
 =======
 As Rails plugin:
-    script/plugin install git://github.com/grosser/simple_auto_complete.git
+    rails plugin install git://github.com/grosser/simple_auto_complete.git
 Or As Gem:
-    sudo gem install simple_autocomplete
+    gem install simple_autocomplete
 
 Then copy javascripts/css from [example folder](http://github.com/grosser/simple_auto_complete/tree/master/example_js/) OR use your own
 
@@ -108,6 +108,6 @@ Inspired by DHH`s 'obstrusive' autocomplete_plugin.
  - [Oliver Azevedo Barnes](http://github.com/oliverbarnes)
  - [Splendeo](http://www.splendeo.es)
 
-[Michael Grosser](http://pragmatig.wordpress.com)  
-grosser.michael@gmail.com  
+[Michael Grosser](http://grosser.it)  
+michael@grosser.it  
 Hereby placed under public domain, do what you want, just do not hold me accountable...
