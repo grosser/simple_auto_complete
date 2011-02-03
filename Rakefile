@@ -1,15 +1,16 @@
 task :default => :spec
-require 'spec/rake/spectask'
-Spec::Rake::SpecTask.new {|t| t.spec_opts = ['--color']}
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.rspec_opts = '--backtrace --color'
+end
 
 begin
   require 'jeweler'
-  project_name = 'simple_autocomplete'
   Jeweler::Tasks.new do |gem|
-    gem.name = project_name
+    gem.name =  'simple_autocomplete'
     gem.summary = "Rails: Simple, customizable, unobstrusive - auto complete"
     gem.email = "grosser.michael@gmail.com"
-    gem.homepage = "http://github.com/grosser/#{project_name}"
+    gem.homepage = "http://github.com/grosser/#{gem.name}"
     gem.authors = ["Michael Grosser"]
   end
 

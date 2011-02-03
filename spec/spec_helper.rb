@@ -1,6 +1,3 @@
-require 'rubygems'
-require 'spec'
-
 require 'active_record'
 require 'action_pack'
 require 'action_controller'
