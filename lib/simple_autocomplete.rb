@@ -9,8 +9,11 @@ class ActionController::Base
     # https://github.com/grosser/simple_auto_complete/pull/6
     define_method("autocomplete_for_#{object}_#{method}") do
       methods = options[:match] || [*method]
-      condition = methods.map{|m| "LOWER(#{m}) LIKE ?"} * " OR "
-      values = methods.map{|m| "%#{params[:q].to_s.downcase}%"}
+      operator = options[:operator] || 'LIKE'
+      mask = options[:mask] || '%%%s%'
+      column_op = options[:column_operator] || 'LOWER(%s)'
+      condition = methods.map{|m| "#{column_op % m} #{operator} ?"} * " OR "
+      values = methods.map{|m| mask % params[:q].to_s.downcase}
       conditions = [condition, *values]
 
       model = object.to_s.camelize.constantize
@@ -18,7 +21,7 @@ class ActionController::Base
         :conditions => conditions,
         :order => "#{methods.first} ASC",
         :limit => 10
-        }.merge!(options.except(:match))
+        }.merge!(options.except(:match, :operator, :mask))
 
       @items = model.scoped(find_options)
 

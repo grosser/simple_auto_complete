@@ -75,6 +75,42 @@ describe 'Controller extensions' do
       @c.autocomplete_for_user_name(:match => [:full_name, :name])
     end
   end
+
+  describe "autocomplete with :operator" do
+    before do
+      UsersController.autocomplete_for(:user, :name, :operator => '=')
+    end
+
+    it "finds using the operator" do
+      @c.stub!(:params).and_return :q=>'Hans'
+      User.should_receive(:scoped).with(hash_including(:conditions => ["LOWER(name) = ?", "%hans%"]))
+      @c.autocomplete_for_user_name(:operator => '=')
+    end
+  end
+
+  describe "autocomplete with :mask" do
+    before do
+      UsersController.autocomplete_for(:user, :name, :mask => '%s%')
+    end
+
+    it "finds using the mask" do
+      @c.stub!(:params).and_return :q=>'Hans'
+      User.should_receive(:scoped).with(hash_including(:conditions => ["LOWER(name) LIKE ?", "hans%"]))
+      @c.autocomplete_for_user_name(:mask => '%s%')
+    end
+  end
+
+  describe "autocomplete with :column_operator" do
+    before do
+      UsersController.autocomplete_for(:user, :name, :column_operator => 'UPPER(%s)')
+    end
+  
+    it "finds using the method mask" do
+      @c.stub!(:params).and_return :q=>'Hans'
+      User.should_receive(:scoped).with(hash_including(:conditions => ["UPPER(name) LIKE ?", "%hans%"]))
+      @c.autocomplete_for_user_name(:column_operator => 'UPPER(%s)')
+    end
+  end
   
   describe "autocomplete using blocks" do
     it "evaluates the block" do
