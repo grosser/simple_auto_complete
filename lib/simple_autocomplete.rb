@@ -12,7 +12,8 @@ class ActionController::Base
       operator = options[:operator] || 'LIKE'
       mask = options[:mask] || '%%%s%'
       column_op = options[:column_operator] || 'LOWER(%s)'
-      condition = methods.map{|m| "#{column_op % m} #{operator} ?"} * " OR "
+      restriction = (options[:parameter_operator] || '%s') % '?'
+      condition = methods.map{|m| "#{column_op % m} #{operator} #{restriction}"} * " OR "
       values = methods.map{|m| mask % params[:q].to_s.downcase}
       conditions = [condition, *values]
 
@@ -21,7 +22,7 @@ class ActionController::Base
         :conditions => conditions,
         :order => "#{methods.first} ASC",
         :limit => 10
-        }.merge!(options.except(:match, :operator, :mask))
+        }.merge!(options.except(:match, :operator, :mask, :column_operator, :parameter_operator))
 
       @items = model.scoped(find_options)
 
