@@ -111,6 +111,18 @@ describe 'Controller extensions' do
       @c.autocomplete_for_user_name(:column_operator => 'UPPER(%s)')
     end
   end
+
+  describe "autocomplete with :parameter_operator" do
+    before do
+      UsersController.autocomplete_for(:user, :name, :parameter_operator => 'UPPER(%s)')
+    end
+
+    it "finds using the method mask" do
+      @c.stub!(:params).and_return :q=>'Hans'
+      User.should_receive(:scoped).with(hash_including(:conditions => ["LOWER(name) LIKE UPPER(?)", "%hans%"]))
+      @c.autocomplete_for_user_name(:parameter_operator => 'UPPER(%s)')
+    end
+  end
   
   describe "autocomplete using blocks" do
     it "evaluates the block" do
