@@ -76,54 +76,30 @@ describe 'Controller extensions' do
     end
   end
 
-  describe "autocomplete with :operator" do
+  describe "autocomplete with :query" do
     before do
-      UsersController.autocomplete_for(:user, :name, :operator => '=')
+      UsersController.autocomplete_for(:user, :name, :query => '%{field} = LOWER(%{query})')
     end
 
     it "finds using the operator" do
       @c.stub!(:params).and_return :q=>'Hans'
-      User.should_receive(:scoped).with(hash_including(:conditions => ["LOWER(name) = ?", "%hans%"]))
-      @c.autocomplete_for_user_name(:operator => '=')
+      User.should_receive(:scoped).with(hash_including(:conditions => ["name = LOWER(?)", "%hans%"]))
+      @c.autocomplete_for_user_name(:query => '%{field} = LOWER(%{query})')
     end
   end
 
   describe "autocomplete with :mask" do
     before do
-      UsersController.autocomplete_for(:user, :name, :mask => '%s%')
+      UsersController.autocomplete_for(:user, :name, :mask => '%{value}%')
     end
 
     it "finds using the mask" do
       @c.stub!(:params).and_return :q=>'Hans'
       User.should_receive(:scoped).with(hash_including(:conditions => ["LOWER(name) LIKE ?", "hans%"]))
-      @c.autocomplete_for_user_name(:mask => '%s%')
+      @c.autocomplete_for_user_name(:mask => '%{value}%')
     end
   end
 
-  describe "autocomplete with :column_operator" do
-    before do
-      UsersController.autocomplete_for(:user, :name, :column_operator => 'UPPER(%s)')
-    end
-  
-    it "finds using the method mask" do
-      @c.stub!(:params).and_return :q=>'Hans'
-      User.should_receive(:scoped).with(hash_including(:conditions => ["UPPER(name) LIKE ?", "%hans%"]))
-      @c.autocomplete_for_user_name(:column_operator => 'UPPER(%s)')
-    end
-  end
-
-  describe "autocomplete with :parameter_operator" do
-    before do
-      UsersController.autocomplete_for(:user, :name, :parameter_operator => 'UPPER(%s)')
-    end
-
-    it "finds using the method mask" do
-      @c.stub!(:params).and_return :q=>'Hans'
-      User.should_receive(:scoped).with(hash_including(:conditions => ["LOWER(name) LIKE UPPER(?)", "%hans%"]))
-      @c.autocomplete_for_user_name(:parameter_operator => 'UPPER(%s)')
-    end
-  end
-  
   describe "autocomplete using blocks" do
     it "evaluates the block" do
       x=0
