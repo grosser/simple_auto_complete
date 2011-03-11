@@ -18,7 +18,7 @@ Examples
 
 Controller
 ----------
-By default, `autocomplete_for` limits the results to 10 entries,
+By default, `autocomplete_for` limits the results to 10 entries,<br/>
 and sorts by the autocomplete field.
 
     class UsersController < ApplicationController
@@ -47,7 +47,7 @@ The items passed into the block is an ActiveRecord scope allowing further scopes
     autocomplete_for :post, :title do |items|
       items.for_user(current_user).map(&:title).join("\n")
     end
-      
+
 View
 ----
     <%= f.text_field :auto_user_name, :class => 'autocomplete', 'data-autocomplete-url'=>autocomplete_for_user_name_users_path %>
@@ -58,7 +58,7 @@ Routes
 
 JS
 --
-use any library you like
+use any library you like<br/>
 (includes examples for jquery jquery.js + jquery.autocomplete.js + jquery.autocomplete.css)
 
 
@@ -108,8 +108,8 @@ Inspired by DHH`s 'obstrusive' autocomplete_plugin.
  - [Oliver Azevedo Barnes](http://github.com/oliverbarnes)
  - [Splendeo](http://www.splendeo.es)
  - [Franco Catena](https://github.com/francocatena)
- 
 
-[Michael Grosser](http://grosser.it)  
-michael@grosser.it  
+
+[Michael Grosser](http://grosser.it)<br/>
+michael@grosser.it<br/>
 Hereby placed under public domain, do what you want, just do not hold me accountable...
