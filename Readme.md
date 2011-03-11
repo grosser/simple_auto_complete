@@ -36,6 +36,13 @@ With :match option you can filter for different columns
     # return full_name of records for auto-completion
     autocomplete_for :user, :full_name, :match => [:firstname, :lastname]
 
+With :query and :mask option you can change the generated query
+
+    # default: "LOWER(full_name) LIKE('%peter%')"
+    # now:     "full_name LIKE('peter%') AND deleted_at IS NULL"
+    autocomplete_for :user, :full_name, :query => "%{field} LIKE(%{query}) AND deleted_at IS NULL", :mask => '%{value}%'
+
+
 With a block you can generate any output you need (ERB allowed):
 
     autocomplete_for :post, :title do |items|
