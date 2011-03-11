@@ -2,7 +2,9 @@ require 'active_record'
 require 'action_pack'
 require 'action_controller'
 
-$LOAD_PATH << "lib"
-require "init"
+root = File.dirname(File.dirname(__FILE__))
 
-require "spec/setup_test_model.rb"
+$LOAD_PATH << "#{root}/lib"
+require "#{root}/init"
+
+require "#{root}/spec/setup_test_model.rb"

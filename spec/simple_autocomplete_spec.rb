@@ -1,5 +1,4 @@
-
-require "spec/spec_helper"
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe SimpleAutocomplete do
   it "has a version" do
@@ -19,7 +18,7 @@ describe 'Controller extensions' do
     @c.stub!(:params).and_return Hash.new
     @c.stub!(:render)
   end
-  
+
   describe 'regression' do
     it "can use long method/class names" do
       class UserAddress < ActiveRecord::Base
@@ -31,22 +30,22 @@ describe 'Controller extensions' do
       @c.autocomplete_for_user_address_full_name
     end
   end
-  
+
   describe 'simple autocomplete' do
     before do
       UsersController.autocomplete_for(:user,:name)
     end
-    
+
     it "renders the items inline" do
       @c.should_receive(:render).with {|hash| hash[:inline] =~ /@items.map \{|item| h(item.name)\}.uniq.join(\'\n\')/}
       @c.autocomplete_for_user_name
     end
-    
+
     it "orders ASC by name" do
       User.should_receive(:scoped).with(hash_including(:order => 'name ASC'))
       @c.autocomplete_for_user_name
     end
-    
+
     it "finds by name" do
       @c.stub!(:params).and_return :q=>'Hans'
       User.should_receive(:scoped).with(hash_including(:conditions => ['LOWER(name) LIKE ?','%hans%']))
@@ -109,7 +108,7 @@ describe 'Controller extensions' do
       @c.autocomplete_for_user_name
       x.should == 1
     end
-    
+
     it "passes found items to the block" do
       User.delete_all
       u1 = User.create!(:name => 'xxx')
@@ -123,7 +122,7 @@ describe 'Controller extensions' do
       @c.stub!(:params).and_return :q=>'xxx'
       @c.autocomplete_for_user_name
     end
-    
+
     it "uses block output for render" do
       UsersController.autocomplete_for(:user, :name) do |items|
         items + 'xx'
@@ -201,7 +200,7 @@ describe 'Model extensions' do
       Author.find_by_autocomplete_name('bob').should == nil
     end
   end
-  
+
   describe "add_by_auto_{name}_{attribute}" do
     it "is always nil when associated is not present" do
       Post.new.add_by_auto_tag_name.should == nil

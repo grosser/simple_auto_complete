@@ -1,7 +1,13 @@
-task :default => :spec
-require "rspec/core/rake_task"
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.rspec_opts = '--backtrace --color'
+task :spec do
+  sh "bundle exec rspec spec"
+end
+
+task :rails2 do
+  sh "cd spec/rails2 && bundle exec rspec ../../spec"
+end
+
+task :default do
+  sh "rake spec && rake rails2"
 end
 
 begin
